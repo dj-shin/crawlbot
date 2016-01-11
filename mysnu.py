@@ -53,7 +53,8 @@ class EtlCrawl(threading.Thread):
                 article = title.a.get_text().strip()
                 if not link in self.link_list:
                     self.link_list.append(link)
-                    self.queue.put('마시마로_業: ' + self.board_name + ' : "' + article + '"[' + link + ']')
+                    self.queue.put({'type':'msg', 'content':'마시마로_業: ' + self.board_name + ' : "' + article})
+                    self.queue.put({'type':'msg', 'content':'"[' + link + ']'})
 
     def run(self):
         self.init_crawl(self.ubboard_id)

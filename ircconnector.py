@@ -66,4 +66,4 @@ class IRCConnector(threading.Thread):
                 continue
 
             message = IRCMessage(ircmsg)
-            self.msgQueue.put(message)
+            self.msgQueue.put({'type':'irc', 'content':message})
