@@ -1,5 +1,6 @@
 import re
 
+
 class IRCMessage():
     msgType = None
     sender = None
@@ -21,4 +22,5 @@ class IRCMessage():
 
     def __repr__(self):
         msg = self.msg
-        return '<IRCMessage : %s %s %s %s %s>' % (self.msgType, self.sender, self.channel, msg, self.target)
+        return '<IRCMessage : %s %s %s %s %s>' \
+               % (self.msgType, self.sender, self.channel, msg, self.target)

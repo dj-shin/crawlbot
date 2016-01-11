@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ircmessage import IRCMessage
 from queue import Queue
@@ -18,11 +18,12 @@ class Bot():
 
         from mysnu import EtlCrawl
         crawlTargetList = [
-            {'name':'심리학개론 자료실', 'id':383757},
-            {'name':'심리학개론 공지사항', 'id':383755},
+            {'name': '심리학개론 자료실', 'id': 383757},
+            {'name': '심리학개론 공지사항', 'id': 383755},
             ]
         for crawlTarget in crawlTargetList:
-            board = EtlCrawl(self.msgQueue, crawlTarget['id'], crawlTarget['name'])
+            board = EtlCrawl(
+                    self.msgQueue, crawlTarget['id'], crawlTarget['name'])
             board.setDaemon(True)
             board.start()
 
@@ -45,14 +46,17 @@ class Bot():
                         self.irc.sendmsg(message.channel, '감사합니다 :)')
 
                 elif message.msgType == 'KICK':
-                    self.channel_list.remove(message.channel)
+                    if message.channel in self.channel_list:
+                        self.channel_list.remove(message.channel)
 
                 elif message.msgType == 'PRIVMSG':
-                    if message.msg == '!공지' and message.channel not in self.channel_list:
+                    if (message.msg == '!공지' and
+                            message.channel not in self.channel_list):
                         self.channel_list.append(message.channel)
                         self.irc.sendmsg(message.channel, '크롤링 공지를 시작합니다')
 
-                    elif message.msg == '!공지해제' and message.channel in self.channel_list:
+                    elif (message.msg == '!공지해제' and
+                            message.channel in self.channel_list):
                         self.channel_list.remove(message.channel)
                         self.irc.sendmsg(message.channel, '크롤링 공지를 해제합니다')
 
