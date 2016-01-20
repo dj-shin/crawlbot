@@ -27,6 +27,11 @@ class Bot():
             board.setDaemon(True)
             board.start()
 
+        from snupsy import PsyCrawl
+        psy = PsyCrawl(self.msgQueue, 'R-Point')
+        psy.setDaemon(True)
+        psy.start()
+
     def run(self):
         while True:
             packet = self.msgQueue.get()

@@ -2,7 +2,7 @@
 import requests
 from queue import Queue
 from bs4 import BeautifulSoup as bs
-from setting import username, password
+from setting import mysnu_username, mysnu_password
 from datetime import datetime
 from time import sleep
 import threading
@@ -23,8 +23,8 @@ class EtlCrawl(threading.Thread):
             'si_realm': 'SnuUser1',
             '_enpass_login_': 'submit',
             'langKnd': 'ko',
-            'si_id': username,
-            'si_pwd': password, }
+            'si_id': mysnu_username,
+            'si_pwd': mysnu_password, }
         login_form_req = self.s.post(
                 'https://sso.snu.ac.kr/safeidentity/modules/auth_idpwd',
                 data=login_form)
@@ -66,7 +66,7 @@ class EtlCrawl(threading.Thread):
                     self.link_list.append(link)
                     self.queue.put(
                             {'type': 'msg',
-                             'content': '마시마로_業: ' + self.board_name +
+                             'content': '마시마로: ' + self.board_name +
                              ' : "' + article})
                     self.queue.put(
                             {'type': 'msg', 'content': '"[' + link + ']'})

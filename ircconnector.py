@@ -50,14 +50,16 @@ class IRCConnector(threading.Thread):
     def run(self):
         while True:
             ircmsg = self.ircsock.recv(8192)
-            ircmsg = ircmsg.decode().strip('\n\r')
-            # ping
-            if ircmsg.find('PING :') != -1:
-                self.ping()
-                continue
-
-            if ircmsg[0] != ':':
-                continue
-
-            message = IRCMessage(ircmsg)
-            self.msgQueue.put({'type': 'irc', 'content': message})
+            try:
+                ircmsg = ircmsg.decode().strip('\n\r')
+            except e:
+                print(e)
+            else:
+                print(ircmsg)
+                message = IRCMessage(ircmsg)
+                if message.isValid():
+                    print(message)
+                    if message.msgType == 'PING':
+                        self.ping()
+                    else:
+                        self.msgQueue.put({'type': 'irc', 'content': message})
