@@ -3,14 +3,15 @@
 import socket
 import ssl
 import threading
-from setting import server, port, botname, botnick
-from ircmessage import IRCMessage
+from connector.setting import server, port, botname, botnick
+from connector.ircmessage import IRCMessage
 from queue import Queue
 
 
 class IRCConnector(threading.Thread):
     ircsock = None
     msgQueue = None
+    botnick = None
 
     def __init__(self, msgQueue):
         threading.Thread.__init__(self)
@@ -20,6 +21,7 @@ class IRCConnector(threading.Thread):
         self.ircsock.send(('USER ' + (botname + ' ') * 3 + ':' +
                            botnick + '\n').encode())
         self.ircsock.send(('NICK ' + botnick + '\n').encode())
+        self.botnick = botnick
 
         self.msgQueue = msgQueue
 

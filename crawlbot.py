@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ircmessage import IRCMessage
+from connector.ircmessage import IRCMessage
 from queue import Queue
-from setting import botnick
 
 
 class Bot():
@@ -11,26 +10,10 @@ class Bot():
     channel_list = []
 
     def __init__(self):
-        from ircconnector import IRCConnector
+        from connector.ircconnector import IRCConnector
         self.irc = IRCConnector(self.msgQueue)
         self.irc.setDaemon(True)
         self.irc.start()
-
-        from mysnu import EtlCrawl
-        crawlTargetList = [
-            {'name': '심리학개론 자료실', 'id': 383757},
-            {'name': '심리학개론 공지사항', 'id': 383755},
-            ]
-        for crawlTarget in crawlTargetList:
-            board = EtlCrawl(
-                    self.msgQueue, crawlTarget['id'], crawlTarget['name'])
-            board.setDaemon(True)
-            board.start()
-
-        from snupsy import PsyCrawl
-        psy = PsyCrawl(self.msgQueue, 'R-Point')
-        psy.setDaemon(True)
-        psy.start()
 
     def run(self):
         while True:
@@ -47,7 +30,7 @@ class Bot():
                     self.irc.joinchan(message.channel)
 
                 elif message.msgType == 'MODE':
-                    if message.msg == '+o ' + botnick:
+                    if message.msg == '+o ' + self.irc.botnick:
                         self.irc.sendmsg(message.channel, '감사합니다 :)')
 
                 elif message.msgType == 'KICK':
